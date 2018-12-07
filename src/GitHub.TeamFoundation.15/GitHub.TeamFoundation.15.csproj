@@ -37,6 +37,15 @@
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <OutputPath>bin\Release\</OutputPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseWithoutVsix|AnyCPU'">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineConstants>TRACE;TEAMEXPLORER15</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <OutputPath>bin\Release\</OutputPath>
+  </PropertyGroup>
   <Import Project="$(SolutionDir)\src\common\signing.props" />
   <ItemGroup>
     <Reference Include="Microsoft.TeamFoundation.Common">
@@ -82,6 +91,9 @@
     </Compile>
     <Compile Include="..\GitHub.TeamFoundation.14\RegistryHelper.cs">
       <Link>RegistryHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\GitHub.TeamFoundation.14\Services\LocalRepositoryModelFactory.cs">
+      <Link>Services\LocalRepositoryModelFactory.cs</Link>
     </Compile>
     <Compile Include="..\GitHub.TeamFoundation.14\Services\VSGitExt.cs">
       <Link>Services\VSGitExt.cs</Link>

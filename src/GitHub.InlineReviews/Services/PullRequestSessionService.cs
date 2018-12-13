@@ -97,7 +97,7 @@ namespace GitHub.InlineReviews.Services
             relativePath = relativePath.Replace("\\", "/");
 
             return pullRequest.CheckSuites
-                ?.SelectMany(checkSuite => checkSuite.CheckRuns.Select(checkRun => new { checkSuite, checkRun}))
+                ?.SelectMany(checkSuite => checkSuite.CheckRuns.Select(checkRun => new { checkSuite, checkRun }))
                 .SelectMany(arg =>
                     arg.checkRun.Annotations
                         .Where(annotation => annotation.Path == relativePath)
@@ -357,12 +357,12 @@ namespace GitHub.InlineReviews.Services
                 { nameof(number), number },
             };
 
-            var connection = await graphqlFactory.CreateConnection(address);
-            var result = await connection.Run(readPullRequest, vars);
+            var connection = await log.TimeAsync("CreateConnection", () => graphqlFactory.CreateConnection(address)).ConfigureAwait(true);
+            var result = await log.TimeAsync("Run", () => connection.Run(readPullRequest, vars)).ConfigureAwait(true);
 
-            var apiClient = await apiClientFactory.Create(address);
-            var files = await apiClient.GetPullRequestFiles(owner, name, number).ToList();
-            var lastCommitModel = await GetPullRequestLastCommitAdapter(address, owner, name, number);
+            var apiClient = await log.TimeAsync("Create", () => apiClientFactory.Create(address)).ConfigureAwait(true);
+            var files = await log.TimeAsync("GetPullRequestFiles", async () => await apiClient.GetPullRequestFiles(owner, name, number).ToList()).ConfigureAwait(true);
+            var lastCommitModel = await log.TimeAsync("GetPullRequestLastCommitAdapter", () => GetPullRequestLastCommitAdapter(address, owner, name, number)).ConfigureAwait(true);
 
             result.Statuses = lastCommitModel.Statuses;
             result.CheckSuites = lastCommitModel.CheckSuites;
@@ -861,7 +861,7 @@ namespace GitHub.InlineReviews.Services
         static void BuildPullRequestThreads(PullRequestDetailModel model)
         {
             var commentsByReplyId = new Dictionary<string, List<CommentAdapter>>();
-           
+
             // Get all comments that are not replies.
             foreach (CommentAdapter comment in model.Reviews.SelectMany(x => x.Comments))
             {
@@ -951,5 +951,5 @@ namespace GitHub.InlineReviews.Services
 
             public string HeadSha { get; set; }
         }
-    }   
+    }
 }

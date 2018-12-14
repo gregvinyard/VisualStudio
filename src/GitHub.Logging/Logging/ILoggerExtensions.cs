@@ -32,7 +32,7 @@ namespace GitHub.Logging
         {
             var startTime = DateTime.Now;
             method();
-            logger.Information("{Name} took {Seconds:0.00} seconds", name, (DateTime.Now - startTime).TotalSeconds);
+            logger.Information("{Name} took {Seconds} seconds", name, (DateTime.Now - startTime).TotalSeconds.ToString("0.##"));
         }
 
         public static T Time<T>(this ILogger logger, string name, Func<T> method)

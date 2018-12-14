@@ -47,7 +47,7 @@ namespace GitHub.Logging
         {
             var startTime = DateTime.Now;
             await methodAsync().ConfigureAwait(false);
-            logger.Information("{Name} took {Seconds:0.00} seconds", name, (DateTime.Now - startTime).TotalSeconds);
+            logger.Information("{Name} took {Seconds} seconds", name, (DateTime.Now - startTime).TotalSeconds.ToString("0.##"));
         }
 
         public static async Task<T> TimeAsync<T>(this ILogger logger, string name, Func<Task<T>> methodAsync)

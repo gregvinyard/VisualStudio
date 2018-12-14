@@ -39,7 +39,7 @@ namespace GitHub.Logging
         {
             var startTime = DateTime.Now;
             var value = method();
-            logger.Information("{Name} took {Seconds:0.00} seconds", name, (DateTime.Now - startTime).TotalSeconds);
+            logger.Information("{Name} took {Seconds} seconds", name, (DateTime.Now - startTime).TotalSeconds.ToString("0.##"));
             return value;
         }
 
